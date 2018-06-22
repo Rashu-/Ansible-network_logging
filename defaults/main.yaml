@@ -1,0 +1,4 @@
+---
+# Define the logging level to be configured (see README for examples)
+logging: { }
+

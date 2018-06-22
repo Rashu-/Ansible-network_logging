@@ -1,0 +1,22 @@
+---
+
+- name: Check network device OS
+  assert:
+    that: >
+      ansible_network_os == 'nxos' or
+      ansible_network_os == 'ios'
+    msg: "Network device OS not defined or not supported by this role: {{ ansible_network_os }}"
+
+- name: Configure logging
+  nxos_logging:
+    state: "{{ item.value.state | default(omit) }}"
+    dest: "{{ item.key | default(omit) }}"
+    dest_level: "{{ item.value.level | default(omit) }}"
+    facility: "{{ item.value.facility | default(omit) }}"    
+  loop: "{{ logging | dict2items }}"
+  when: >
+    ansible_network_os == 'nxos' and  
+    item.value is defined  
+  tags: 
+    - logging
+    - nxos
